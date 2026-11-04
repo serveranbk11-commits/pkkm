@@ -211,7 +211,7 @@
                     <i class="fas fa-cubes text-3xl text-white drop-shadow-md"></i>
                 </div>
                 <h1 id="login-title" class="text-2xl font-extrabold tracking-tight text-slate-800 leading-tight">E-PKKM</h1>
-                <p class="text-xs text-slate-500 mt-2 font-bold tracking-wide uppercase">Sistem PKKM</p>
+                <p class="text-xs text-slate-500 mt-2 font-bold tracking-wide uppercase">Sistem Penilaian Kinerja</p>
             </div>
             <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
                 <div class="text-left relative">
@@ -564,11 +564,31 @@
             </div><div class="space-y-8">`;
 
             globalData.komponen.forEach(k => {
-                html += `<div class="clay-card p-6"><h3 class="text-lg font-black text-blue-600 mb-4 border-b border-slate-200 pb-2">${k.id}. ${k.nama}</h3>`;
+                html += `<div class="clay-card p-6">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-2">
+                        <h3 class="text-lg font-black text-blue-600">${k.id}. ${k.nama}</h3>
+                        <div class="flex gap-2">
+                            <button onclick="modalEditKriteria('${k.id}')" class="clay-btn w-8 h-8 rounded-full text-blue-500 flex justify-center items-center" title="Edit Kriteria"><i class="fas fa-edit text-[10px]"></i></button>
+                            <button onclick="deleteKriteria('${k.id}')" class="clay-btn w-8 h-8 rounded-full text-rose-500 flex justify-center items-center" title="Hapus Kriteria"><i class="fas fa-trash text-[10px]"></i></button>
+                        </div>
+                    </div>`;
                 globalData.sub.filter(s => s.k_id === k.id).forEach(s => {
-                    html += `<div class="ml-4 mb-4 p-5 clay-inset"><h4 class="font-bold text-sm text-slate-800 mb-3">${s.kode_sub} - ${s.nama}</h4>`;
+                    html += `<div class="ml-4 mb-4 p-5 clay-inset">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-sm text-slate-800">${s.kode_sub} - ${s.nama}</h4>
+                            <div class="flex gap-2">
+                                <button onclick="modalEditSubKriteria('${s.id}')" class="clay-btn w-7 h-7 rounded-full text-blue-500 flex justify-center items-center" title="Edit Sub Kriteria"><i class="fas fa-edit text-[10px]"></i></button>
+                                <button onclick="deleteSubKriteria('${s.id}')" class="clay-btn w-7 h-7 rounded-full text-rose-500 flex justify-center items-center" title="Hapus Sub Kriteria"><i class="fas fa-trash text-[10px]"></i></button>
+                            </div>
+                        </div>`;
                     globalData.indikator.filter(i => i.sub_id === s.id).forEach(it => {
-                        html += `<div class="text-xs font-medium text-slate-600 ml-4 py-2 flex justify-between items-center border-b border-slate-200/50"><span class="w-5/6">- ${it.keterangan}</span><button onclick="deleteIndikator('${it.id}')" class="clay-btn w-8 h-8 rounded-full text-rose-500 flex justify-center items-center"><i class="fas fa-trash text-[10px]"></i></button></div>`;
+                        html += `<div class="text-xs font-medium text-slate-600 ml-4 py-2 flex justify-between items-center border-b border-slate-200/50">
+                            <span class="w-5/6">- ${it.keterangan}</span>
+                            <div class="flex gap-2 shrink-0">
+                                <button onclick="modalEditIndikatorAdmin('${it.id}')" class="clay-btn w-7 h-7 rounded-full text-blue-500 flex justify-center items-center" title="Edit Bukti Fisik"><i class="fas fa-edit text-[10px]"></i></button>
+                                <button onclick="deleteIndikator('${it.id}')" class="clay-btn w-7 h-7 rounded-full text-rose-500 flex justify-center items-center" title="Hapus Bukti Fisik"><i class="fas fa-trash text-[10px]"></i></button>
+                            </div>
+                        </div>`;
                     });
                     html += `</div>`;
                 });
@@ -772,6 +792,89 @@
                 let sub_id = document.getElementById('ind-subid').value; let keterangan = document.getElementById('ind-ket').value;
                 let res = await callApi('save_indikator', { sub_id, keterangan });
                 if(res.success) { closeModal(); await loadAllData(); showToast("Indikator ditambahkan", "success"); }
+            });
+        }
+
+        function modalEditKriteria(id) {
+            let k = globalData.komponen.find(x => x.id === id);
+            if(!k) return;
+            showModal("Edit Kriteria Utama", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Nama Kriteria</label>
+                        <input type="text" id="edit-k-nama" class="clay-inset text-sm" value="${k.nama}">
+                    </div>
+                </div>`, async () => {
+                let nama = document.getElementById('edit-k-nama').value;
+                let res = await callApi('edit_kriteria', { id, nama });
+                if(res.success) { closeModal(); await loadAllData(); showToast("Kriteria diperbarui", "success"); }
+            });
+        }
+
+        async function deleteKriteria(id) {
+            showModal("Konfirmasi Hapus", "<p class='text-sm text-slate-600 font-medium'>Yakin menghapus kriteria ini? Semua sub dan indikator di dalamnya akan kehilangan induknya.</p>", async () => {
+                closeModal();
+                let res = await callApi('delete_kriteria', { id });
+                if(res.success) { await loadAllData(); showToast("Kriteria berhasil dihapus", "success"); }
+            }, "Ya, Hapus!", true);
+        }
+
+        function modalEditSubKriteria(id) {
+            let s = globalData.sub.find(x => x.id === id);
+            if(!s) return;
+            let opts = globalData.komponen.map(k => `<option value="${k.id}" ${k.id === s.k_id ? 'selected' : ''}>${k.id} - ${k.nama}</option>`).join('');
+            
+            showModal("Edit Sub Kriteria", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Induk Kriteria</label>
+                        <select id="edit-sub-kid" class="clay-inset text-sm font-semibold">${opts}</select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Kode Sub</label>
+                        <input type="text" id="edit-sub-kode" class="clay-inset text-sm" value="${s.kode_sub}">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Nama Sub Kriteria</label>
+                        <input type="text" id="edit-sub-nama" class="clay-inset text-sm" value="${s.nama}">
+                    </div>
+                </div>`, async () => {
+                let k_id = document.getElementById('edit-sub-kid').value; 
+                let kode_sub = document.getElementById('edit-sub-kode').value; 
+                let nama = document.getElementById('edit-sub-nama').value;
+                let res = await callApi('edit_sub', { id, k_id, kode_sub, nama });
+                if(res.success) { closeModal(); await loadAllData(); showToast("Sub Kriteria diperbarui", "success"); }
+            });
+        }
+
+        async function deleteSubKriteria(id) {
+            showModal("Konfirmasi Hapus", "<p class='text-sm text-slate-600 font-medium'>Yakin menghapus Sub Kriteria ini?</p>", async () => {
+                closeModal();
+                let res = await callApi('delete_sub', { id });
+                if(res.success) { await loadAllData(); showToast("Sub Kriteria berhasil dihapus", "success"); }
+            }, "Ya, Hapus!", true);
+        }
+
+        function modalEditIndikatorAdmin(id) {
+            let ind = globalData.indikator.find(x => x.id === id);
+            if(!ind) return;
+            let opts = globalData.sub.map(s => `<option value="${s.id}" ${s.id === ind.sub_id ? 'selected' : ''}>${s.kode_sub} - ${s.nama}</option>`).join('');
+            
+            showModal("Edit Indikator & Bukti Fisik", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Pilih Sub Kriteria Induk</label>
+                        <select id="edit-ind-subid" class="clay-inset text-sm font-semibold">${opts}</select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Keterangan Dokumen Bukti Fisik</label>
+                        <textarea id="edit-ind-ket" class="clay-inset text-sm h-24">${ind.keterangan}</textarea>
+                    </div>
+                </div>`, async () => {
+                let sub_id = document.getElementById('edit-ind-subid').value; 
+                let keterangan = document.getElementById('edit-ind-ket').value;
+                let res = await callApi('edit_indikator', { id, sub_id, keterangan });
+                if(res.success) { closeModal(); await loadAllData(); showToast("Indikator diperbarui", "success"); }
             });
         }
 

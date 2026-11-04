@@ -235,7 +235,7 @@
     <!-- MAIN APP SECTION -->
     <div id="app-section" class="hidden h-screen p-4 flex flex-col md:flex-row gap-6 app-content box-border">
         <!-- Sidebar -->
-        <aside class="w-full md:w-68 clay-card flex flex-col h-auto md:h-full shrink-0 overflow-hidden relative z-20">
+        <aside class="w-full md:w-[280px] clay-card flex flex-col h-auto md:h-full shrink-0 overflow-hidden relative z-20">
             <div class="p-6 flex items-center gap-4 border-b border-white/30">
                 <div class="w-12 h-12 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 border border-white/50">
                     <i class="fas fa-cubes text-white text-xl"></i>
@@ -394,6 +394,12 @@
             let res = await callApi('get_app_data');
             if(res.success) {
                 globalData = res.data;
+                // Pengaman jika database dari sheet masih kosong
+                globalData.komponen = globalData.komponen || [];
+                globalData.sub = globalData.sub || [];
+                globalData.indikator = globalData.indikator || [];
+                globalData.settings = globalData.settings || {};
+
                 document.getElementById('user-name-display').innerText = currentUser.name;
                 document.getElementById('sidebar-role').innerText = currentUser.role === 'kepsek' ? 'KEPALA MADRASAH' : currentUser.role === 'pj' ? `PJ Kriteria ${currentUser.kriteria_id}` : 'ADMIN';
                 document.getElementById('user-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=e0e5ec&color=4a90e2&rounded=true&bold=true`;

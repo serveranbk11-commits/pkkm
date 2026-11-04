@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-PKKM | Dashboard Kaca V8</title>
+    <title>E-PKKM | 3D Clay Modern UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -19,203 +19,213 @@
 
     <style>
         :root {
-            --bg-deep: #050b14;
-            --glass-bg: rgba(13, 22, 38, 0.65);
-            --glass-border: rgba(56, 189, 248, 0.15);
-            --glow-blue: rgba(14, 165, 233, 0.35);
+            /* Palette Clay/Neumorphism Terang */
+            --bg-clay: #e0e5ec;
+            --shadow-light: rgba(255, 255, 255, 0.8);
+            --shadow-dark: rgba(163, 177, 198, 0.5);
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --accent-primary: #4a90e2;
+            --accent-glow: rgba(74, 144, 226, 0.4);
         }
 
         body {
-            background-color: var(--bg-deep);
-            color: #f1f5f9;
+            background-color: var(--bg-clay);
+            color: var(--text-main);
             font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             margin: 0;
             overflow: hidden;
         }
 
-        /* Ambient Blue Glow Orbs */
-        .ambient-orb {
+        /* 3D Shapes Background */
+        .clay-shape {
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
+            background: var(--bg-clay);
+            box-shadow: 15px 15px 30px var(--shadow-dark), -15px -15px 30px var(--shadow-light);
             z-index: -1;
-            opacity: 0.5;
-            animation: floatOrb 25s infinite alternate ease-in-out;
+            animation: floatShape 20s infinite alternate ease-in-out;
         }
-        .orb-1 { top: -15%; left: -10%; width: 55vw; height: 55vw; background: rgba(14, 165, 233, 0.25); }
-        .orb-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: rgba(37, 99, 235, 0.2); animation-delay: -7s; }
-        .orb-3 { top: 30%; left: 35%; width: 45vw; height: 45vw; background: rgba(56, 189, 248, 0.15); animation-delay: -14s; }
+        .shape-1 { top: 5%; left: 10%; width: 300px; height: 300px; }
+        .shape-2 { bottom: 10%; right: 5%; width: 400px; height: 400px; animation-delay: -5s; }
+        .shape-3 { top: 40%; left: 50%; width: 150px; height: 150px; animation-delay: -10s; }
 
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(4%, 8%) scale(1.05); }
-            100% { transform: translate(-4%, -8%) scale(0.95); }
+        @keyframes floatShape {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(30px, 50px) rotate(20deg); }
         }
 
-        /* Glassmorphism V8 */
-        .glass-v8 {
-            background: var(--glass-bg);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+        /* Komponen UI: 3D Clay Card */
+        .clay-card {
+            background: var(--bg-clay);
             border-radius: 1.5rem;
+            box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .glass-v8-sub {
-            background: rgba(15, 25, 45, 0.4);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+        /* Komponen UI: Interactive Dataplane Card (Hover) */
+        .clay-card-interactive:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 20px var(--shadow-dark), -12px -12px 20px var(--shadow-light);
+        }
+
+        /* Komponen UI: Glassmorphism dipadu Clay */
+        .clay-glass {
+            background: rgba(224, 229, 236, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            box-shadow: 9px 9px 16px rgba(163, 177, 198, 0.3), -9px -9px 16px rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        /* Komponen UI: Input & Panel Dalam (Inset Shadow) */
+        .clay-inset {
+            background: var(--bg-clay);
             border-radius: 1rem;
-        }
-
-        .glass-input {
-            background: rgba(3, 7, 18, 0.6);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            color: #f8fafc;
-            border-radius: 999px;
+            box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
+            border: none;
+            color: var(--text-main);
             padding: 0.75rem 1.25rem;
             width: 100%;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             font-size: 0.9rem;
         }
-        .glass-input:focus {
+        .clay-inset:focus {
             outline: none;
-            border-color: #38bdf8;
-            background: rgba(3, 7, 18, 0.85);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+            box-shadow: inset 7px 7px 14px var(--shadow-dark), inset -7px -7px 14px var(--shadow-light), 0 0 0 3px rgba(74, 144, 226, 0.2);
         }
-        select.glass-input, textarea.glass-input { border-radius: 1rem; }
-        select.glass-input option { background: #0a1120; color: #f8fafc; }
+        select.clay-inset, textarea.clay-inset { border-radius: 1rem; }
 
-        /* Modern Blue Glow Buttons */
-        .btn-v8-primary {
-            background: linear-gradient(135deg, #0284c7, #0ea5e9);
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        /* Komponen UI: Tombol 3D */
+        .clay-btn {
+            background: var(--bg-clay);
             border-radius: 999px;
-            color: white;
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            color: var(--text-main);
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            border: none;
         }
-        .btn-v8-primary:hover {
-            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.6);
-            transform: translateY(-1px);
+        .clay-btn:active {
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
         }
 
-        .btn-v8-danger {
-            background: linear-gradient(135deg, #e11d48, #f43f5e);
-            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.35);
-            border-radius: 999px;
+        .clay-btn-primary {
+            background: linear-gradient(135deg, #4a90e2, #007aff);
             color: white;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            box-shadow: 5px 5px 12px var(--accent-glow), -5px -5px 12px var(--shadow-light), inset 2px 2px 5px rgba(255,255,255,0.3);
         }
-        .btn-v8-danger:hover { background: linear-gradient(135deg, #f43f5e, #fb7185); }
-
-        .btn-v8-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 999px;
-            color: #cbd5e1;
-            font-weight: 500;
-            transition: all 0.3s ease;
+        .clay-btn-primary:active {
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2);
         }
-        .btn-v8-secondary:hover { background: rgba(255, 255, 255, 0.1); color: white; border-color: rgba(56, 189, 248, 0.3); }
 
-        /* Sidebar Navigation V8 */
-        .nav-v8 {
+        .clay-btn-danger {
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            color: white;
+            box-shadow: 5px 5px 12px rgba(238, 82, 83, 0.3), -5px -5px 12px var(--shadow-light), inset 2px 2px 5px rgba(255,255,255,0.3);
+        }
+
+        /* Sidebar Navigation */
+        .nav-clay {
             position: relative;
             transition: all 0.3s ease;
             border-radius: 0.75rem;
-            color: #94a3b8;
-        }
-        .nav-v8::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 15%;
-            height: 70%;
-            width: 3px;
-            background: #38bdf8;
-            border-radius: 0 4px 4px 0;
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 10px #38bdf8;
-        }
-        .nav-v8.active::before { transform: scaleY(1); }
-        .nav-v8.active {
-            background: linear-gradient(90deg, rgba(14, 165, 233, 0.15) 0%, transparent 100%);
-            color: #38bdf8;
+            color: var(--text-muted);
             font-weight: 600;
-            border: 1px solid rgba(56, 189, 248, 0.1);
         }
-        .nav-v8:hover:not(.active) { background: rgba(255, 255, 255, 0.03); color: #f1f5f9; }
+        .nav-clay.active {
+            background: var(--bg-clay);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+            color: var(--accent-primary);
+        }
+        .nav-clay:hover:not(.active) { color: var(--text-main); }
 
         /* Tables */
-        .v8-table { border-collapse: separate; border-spacing: 0 0.6rem; width: 100%; }
-        .v8-table th { padding: 1rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.04); }
-        .v8-table tr.v8-row { background: rgba(255, 255, 255, 0.02); transition: all 0.25s ease; }
-        .v8-table tr.v8-row:hover { background: rgba(14, 165, 233, 0.05); transform: scale(1.005); }
-        .v8-table td { padding: 1rem; border-top: 1px solid rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .clay-table { border-collapse: separate; border-spacing: 0 0.8rem; width: 100%; }
+        .clay-table th { padding: 1rem; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; border-bottom: 2px solid rgba(0,0,0,0.05); }
+        .clay-table tr.clay-row { 
+            background: var(--bg-clay); 
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            border-radius: 1rem;
+            transition: all 0.25s ease; 
+        }
+        .clay-table tr.clay-row:hover { transform: scale(1.01); }
+        .clay-table td { padding: 1rem; border: none; }
+        .clay-table td:first-child { border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; }
+        .clay-table td:last-child { border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; }
+
+        /* Chart Bar / Progress Indicator */
+        .clay-progress-bar {
+            background: var(--bg-clay);
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+            border-radius: 999px;
+            overflow: hidden;
+            height: 12px;
+        }
+        .clay-progress-fill {
+            background: linear-gradient(90deg, #4a90e2, #007aff);
+            height: 100%;
+            border-radius: 999px;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
+        }
 
         #loading-overlay { z-index: 9999; }
         #toast-container { z-index: 2000; pointer-events: none; }
         .modal-overlay { z-index: 1000; }
     </style>
 </head>
-<body class="antialiased">
-    <div class="fixed inset-0 z-[-1] overflow-hidden bg-[#050b14]">
-        <div class="ambient-orb orb-1"></div>
-        <div class="ambient-orb orb-2"></div>
-        <div class="ambient-orb orb-3"></div>
+<body class="antialiased relative">
+    <div class="fixed inset-0 z-[-1] overflow-hidden">
+        <div class="clay-shape shape-1"></div>
+        <div class="clay-shape shape-2"></div>
+        <div class="clay-shape shape-3"></div>
     </div>
 
     <!-- LOADING OVERLAY -->
-    <div id="loading-overlay" class="fixed inset-0 bg-[#050b14]/85 backdrop-blur-md hidden flex-col justify-center items-center">
+    <div id="loading-overlay" class="fixed inset-0 bg-[#e0e5ec]/80 backdrop-blur-md hidden flex-col justify-center items-center">
         <div class="relative w-20 h-20">
-            <div class="absolute inset-0 border-4 border-t-sky-400 border-r-blue-600 border-b-cyan-500 border-l-transparent rounded-full animate-spin"></div>
-            <i class="fas fa-gem absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sky-400"></i>
+            <div class="absolute inset-0 border-4 border-t-blue-500 border-r-indigo-500 border-b-cyan-500 border-l-transparent rounded-full animate-spin"></div>
+            <i class="fas fa-layer-group absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-500 text-2xl"></i>
         </div>
-        <p class="text-sky-300 font-semibold tracking-widest text-xs mt-6 animate-pulse" id="loading-text">MEMUAT DASHBOARD KACA...</p>
+        <p class="text-slate-700 font-bold tracking-widest text-xs mt-6 animate-pulse" id="loading-text">MEMUAT SISTEM...</p>
     </div>
 
     <div id="toast-container" class="fixed top-6 right-6 flex flex-col gap-3 items-end"></div>
-    <div id="modal-overlay" class="modal-overlay fixed inset-0 bg-slate-950/70 backdrop-blur-md hidden justify-center items-center p-4">
-        <div id="modal-content" class="glass-v8 w-full max-w-lg p-8 transform scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto border-t-2 border-t-sky-400"></div>
+    <div id="modal-overlay" class="modal-overlay fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden justify-center items-center p-4">
+        <div id="modal-content" class="clay-card w-full max-w-lg p-8 transform scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto border-t-4 border-t-blue-500"></div>
     </div>
 
     <!-- LOGIN SECTION -->
     <div id="login-section" class="min-h-screen flex items-center justify-center p-4 relative z-10">
-        <div class="glass-v8 w-full max-w-md p-10 text-center relative overflow-hidden">
-            <div class="absolute -top-12 -right-12 w-32 h-32 bg-sky-500/20 rounded-full blur-2xl"></div>
+        <div class="clay-glass w-full max-w-md p-10 text-center relative overflow-hidden">
             <div class="mb-8">
-                <div class="w-20 h-20 mx-auto bg-gradient-to-tr from-sky-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-sky-500/30 border border-sky-400/30">
-                    <i class="fas fa-graduation-cap text-3xl text-white"></i>
+                <div class="w-20 h-20 mx-auto bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30 border border-white/40">
+                    <i class="fas fa-cubes text-3xl text-white drop-shadow-md"></i>
                 </div>
-                <h1 class="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-400 to-cyan-300">E-PKKM V8</h1>
-                <p class="text-xs text-slate-400 mt-2 font-medium tracking-wide">Dashboard Kaca Modern & Minimalis</p>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-800">E-PKKM</h1>
+                <p class="text-xs text-slate-500 mt-2 font-bold tracking-wide uppercase">3D Clay Modern UI</p>
             </div>
             <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
                 <div class="text-left relative">
                     <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <input type="text" id="username" class="glass-input pl-12" placeholder="Username" required autocomplete="off">
+                    <input type="text" id="username" class="clay-inset pl-12" placeholder="Username" required autocomplete="off">
                 </div>
                 <div class="text-left relative">
                     <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <input type="password" id="password" class="glass-input pl-12 pr-10" placeholder="Password" required>
-                    <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-sky-400 focus:outline-none">
+                    <input type="password" id="password" class="clay-inset pl-12 pr-10" placeholder="Password" required>
+                    <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-blue-500 focus:outline-none">
                         <i class="fas fa-eye" id="toggle-pwd-icon"></i>
                     </button>
                 </div>
-                <button type="submit" class="btn-v8-primary w-full py-3.5 mt-2 text-sm tracking-wider uppercase">
+                <button type="submit" class="clay-btn clay-btn-primary w-full py-3.5 mt-4 text-sm tracking-wider uppercase">
                     Masuk Sistem <i class="fas fa-arrow-right ml-2 text-xs"></i>
                 </button>
             </form>
@@ -223,39 +233,41 @@
     </div>
 
     <!-- MAIN APP SECTION -->
-    <div id="app-section" class="hidden h-screen p-4 flex flex-col md:flex-row gap-4 app-content box-border">
-        <aside class="w-full md:w-64 glass-v8 flex flex-col h-auto md:h-full shrink-0 overflow-hidden shadow-2xl">
-            <div class="p-6 flex items-center gap-4 bg-white/[0.02] border-b border-white/[0.05]">
-                <div class="w-10 h-10 bg-gradient-to-tr from-sky-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-sky-500/20">
-                    <i class="fas fa-graduation-cap text-white text-base"></i>
+    <div id="app-section" class="hidden h-screen p-4 flex flex-col md:flex-row gap-6 app-content box-border">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-68 clay-card flex flex-col h-auto md:h-full shrink-0 overflow-hidden relative z-20">
+            <div class="p-6 flex items-center gap-4 border-b border-white/30">
+                <div class="w-12 h-12 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 border border-white/50">
+                    <i class="fas fa-cubes text-white text-xl"></i>
                 </div>
                 <div>
-                    <h2 class="font-bold text-base tracking-wide text-white leading-tight">E-PKKM V8</h2>
-                    <span id="sidebar-role" class="text-[9px] uppercase tracking-widest text-sky-400 font-bold bg-sky-950/60 border border-sky-500/20 py-0.5 px-2 rounded-md">Role</span>
+                    <h2 class="font-extrabold text-lg tracking-wide text-slate-800 leading-tight">E-PKKM</h2>
+                    <span id="sidebar-role" class="text-[10px] uppercase tracking-widest text-blue-600 font-bold">Role</span>
                 </div>
             </div>
-            <nav class="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto" id="sidebar-nav"></nav>
-            <div class="p-4 bg-slate-900/30 border-t border-white/[0.05] mt-auto">
-                <div class="flex items-center gap-3 mb-4 px-2">
-                    <img src="" alt="Avatar" id="user-avatar" class="w-10 h-10 rounded-full border-2 border-sky-400/40">
+            <nav class="flex-1 px-4 py-6 space-y-3 overflow-y-auto" id="sidebar-nav"></nav>
+            <div class="p-5 border-t border-white/30 mt-auto bg-[#e0e5ec]">
+                <div class="flex items-center gap-3 mb-5 px-2">
+                    <img src="" alt="Avatar" id="user-avatar" class="w-10 h-10 rounded-full shadow-md">
                     <div class="overflow-hidden">
-                        <p id="user-name-display" class="text-xs font-bold truncate text-slate-200">User</p>
-                        <p class="text-[9px] text-sky-400 uppercase tracking-widest font-semibold">Online V8</p>
+                        <p id="user-name-display" class="text-sm font-bold truncate text-slate-800">User</p>
+                        <p class="text-[9px] text-emerald-500 uppercase tracking-widest font-bold"><i class="fas fa-circle text-[7px] mr-1"></i> Online</p>
                     </div>
                 </div>
-                <button onclick="handleLogout()" class="btn-v8-secondary w-full py-2.5 text-xs">
-                    <i class="fas fa-sign-out-alt mr-1"></i> Keluar
+                <button onclick="handleLogout()" class="clay-btn w-full py-2.5 text-xs text-rose-500 hover:text-rose-600">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Keluar Sistem
                 </button>
             </div>
         </aside>
 
-        <main class="flex-1 glass-v8 flex flex-col h-full relative overflow-hidden shadow-2xl">
-            <header class="h-20 flex items-center justify-between px-8 bg-white/[0.02] border-b border-white/[0.05] shrink-0 z-10 backdrop-blur-md">
-                <h2 id="page-title" class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-sky-300">Dashboard</h2>
+        <!-- Main Content -->
+        <main class="flex-1 clay-glass flex flex-col h-full relative overflow-hidden z-20">
+            <header class="h-20 flex items-center justify-between px-8 border-b border-white/40 shrink-0 backdrop-blur-md bg-[#e0e5ec]/60">
+                <h2 id="page-title" class="text-xl font-extrabold text-slate-800">Dashboard</h2>
                 <div class="flex items-center gap-3">
                     <div class="hidden md:flex flex-col items-end mr-3">
-                        <span id="madrasah-name-display" class="text-xs font-semibold text-slate-200">Madrasah</span>
-                        <span class="text-[9px] text-sky-400 font-bold uppercase tracking-wider">Tahun Pelajaran 2026/2027</span>
+                        <span id="madrasah-name-display" class="text-sm font-bold text-slate-800">Madrasah</span>
+                        <span class="text-[10px] text-blue-500 font-bold uppercase tracking-wider">Thn Pelajaran 2026/2027</span>
                     </div>
                 </div>
             </header>
@@ -268,13 +280,16 @@
         /**
          * ============================================================
          * WAJIB DIUBAH!
-         * Ganti URL di bawah dengan URL Web App Apps Script Anda setelah deploy.
+         * Ganti URL di bawah dengan URL Web App Apps Script Anda.
          * ============================================================
          */
         const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXKAx8ZNFp9VvbW--QCMuihTLts0siALvI8882wNO1mZKV2o3zxg0zBmw6odDemGNR/exec";
 
         let currentUser = null;
         let globalData = { settings: {}, komponen: [], sub: [], indikator: [], penilaian: [] };
+        
+        // VARIABEL STATE UNTUK MENCEGAH JUMP KE DASHBOARD
+        let currentView = 'dashboard';
 
         function togglePassword() {
             const pwdInput = document.getElementById('password');
@@ -296,12 +311,12 @@
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            let borderClass = "border-sky-500", iconColor = "text-sky-400", icon = "fa-info-circle";
-            if (type === 'success') { borderClass = "border-emerald-500"; iconColor = "text-emerald-400"; icon = "fa-check-circle"; }
-            if (type === 'error') { borderClass = "border-rose-500"; iconColor = "text-rose-400"; icon = "fa-exclamation-circle"; }
+            let borderClass = "border-blue-500", iconColor = "text-blue-500", icon = "fa-info-circle";
+            if (type === 'success') { borderClass = "border-emerald-500"; iconColor = "text-emerald-500"; icon = "fa-check-circle"; }
+            if (type === 'error') { borderClass = "border-rose-500"; iconColor = "text-rose-500"; icon = "fa-exclamation-circle"; }
 
-            toast.className = `glass-v8 border-l-4 ${borderClass} text-slate-200 px-5 py-4 rounded-xl shadow-2xl flex items-center gap-4 transform transition-all duration-300 translate-x-full opacity-0 min-w-[300px]`;
-            toast.innerHTML = `<i class="fas ${icon} ${iconColor} text-xl"></i><div><h4 class="font-bold text-xs tracking-wider text-white uppercase">${type}</h4><p class="text-xs text-slate-300 mt-0.5">${message}</p></div>`;
+            toast.className = `clay-card border-l-4 ${borderClass} px-5 py-4 flex items-center gap-4 transform transition-all duration-300 translate-x-full opacity-0 min-w-[300px] mb-3`;
+            toast.innerHTML = `<i class="fas ${icon} ${iconColor} text-xl"></i><div><h4 class="font-bold text-xs tracking-wider text-slate-800 uppercase">${type}</h4><p class="text-xs text-slate-600 mt-0.5 font-medium">${message}</p></div>`;
             container.appendChild(toast);
             setTimeout(() => toast.classList.remove('translate-x-full', 'opacity-0'), 10);
             setTimeout(() => { toast.classList.add('translate-x-full', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
@@ -310,16 +325,17 @@
         function showModal(title, contentHtml, onConfirm = null, confirmText = "Simpan", isDanger = false) {
             const overlay = document.getElementById('modal-overlay');
             const content = document.getElementById('modal-content');
-            let buttonsHtml = `<button type="button" onclick="closeModal()" class="btn-v8-secondary px-5 py-2 text-xs">Batal</button>`;
-            if (onConfirm) buttonsHtml += `<button type="button" id="modal-confirm-btn" class="btn-v8-${isDanger ? 'danger' : 'primary'} px-5 py-2 text-xs">${confirmText}</button>`;
+            let btnClass = isDanger ? 'clay-btn-danger' : 'clay-btn-primary';
+            let buttonsHtml = `<button type="button" onclick="closeModal()" class="clay-btn px-5 py-2.5 text-xs">Batal</button>`;
+            if (onConfirm) buttonsHtml += `<button type="button" id="modal-confirm-btn" class="clay-btn ${btnClass} px-6 py-2.5 text-xs">${confirmText}</button>`;
 
             content.innerHTML = `
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold tracking-tight text-white">${title}</h3>
-                    <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/5 text-slate-400 hover:text-white transition flex items-center justify-center border border-white/10"><i class="fas fa-times text-xs"></i></button>
+                    <h3 class="text-xl font-extrabold text-slate-800">${title}</h3>
+                    <button onclick="closeModal()" class="w-8 h-8 rounded-full clay-btn flex items-center justify-center text-slate-500 hover:text-slate-800"><i class="fas fa-times text-xs"></i></button>
                 </div>
-                <div class="mb-6">${contentHtml}</div>
-                <div class="flex justify-end gap-3 pt-4 border-t border-white/5">${buttonsHtml}</div>
+                <div class="mb-8">${contentHtml}</div>
+                <div class="flex justify-end gap-4">${buttonsHtml}</div>
             `;
             overlay.classList.remove('hidden'); overlay.classList.add('flex');
             if (onConfirm) document.getElementById('modal-confirm-btn').onclick = () => onConfirm();
@@ -357,6 +373,7 @@
                 sessionStorage.setItem('token', res.token);
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('app-section').classList.remove('hidden');
+                currentView = 'dashboard'; // Set view awal
                 await loadAllData();
                 showToast("Login Berhasil", "success");
             } else {
@@ -365,7 +382,7 @@
         }
 
         function handleLogout() {
-            showModal("Konfirmasi Keluar", "<p class='text-sm text-slate-300'>Yakin ingin mengakhiri sesi V8 ini?</p>", async () => {
+            showModal("Konfirmasi Keluar", "<p class='text-sm text-slate-600 font-medium'>Yakin ingin mengakhiri sesi aplikasi ini?</p>", async () => {
                 closeModal();
                 await callApi('logout');
                 sessionStorage.clear();
@@ -379,10 +396,12 @@
                 globalData = res.data;
                 document.getElementById('user-name-display').innerText = currentUser.name;
                 document.getElementById('sidebar-role').innerText = currentUser.role === 'kepsek' ? 'KEPALA MADRASAH' : currentUser.role === 'pj' ? `PJ Kriteria ${currentUser.kriteria_id}` : 'ADMIN';
-                document.getElementById('user-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0284c7&color=fff&rounded=true&bold=true`;
+                document.getElementById('user-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=e0e5ec&color=4a90e2&rounded=true&bold=true`;
                 document.getElementById('madrasah-name-display').innerText = globalData.settings.nama_madrasah || "Madrasah";
                 buildSidebar();
-                navigate('dashboard');
+                
+                // MENGGUNAKAN currentView UNTUK MENCEGAH JUMP KE DASHBOARD SETELAH EDIT
+                navigate(currentView); 
             }
         }
 
@@ -390,33 +409,34 @@
             const nav = document.getElementById('sidebar-nav');
             nav.innerHTML = '';
             const menu = [
-                { id: 'dashboard', icon: 'fa-chart-pie', text: 'Dashboard', roles: ['admin', 'kepsek', 'pj'] },
+                { id: 'dashboard', icon: 'fa-chart-pie', text: 'Dashboard Analisis', roles: ['admin', 'kepsek', 'pj'] },
                 { id: 'instrumen', icon: 'fa-list-check', text: 'Instrumen & Bukti', roles: ['kepsek', 'pj', 'admin'] },
                 { id: 'admin_kriteria', icon: 'fa-layer-group', text: 'Master Kriteria & Sub', roles: ['admin'] },
-                { id: 'admin_pj', icon: 'fa-users-gear', text: 'Akun PJ', roles: ['admin'] },
-                { id: 'laporan', icon: 'fa-file-export', text: 'Pusat Laporan', roles: ['admin', 'kepsek', 'pj'] },
-                { id: 'settings', icon: 'fa-sliders', text: 'Pengaturan', roles: ['admin'] }
+                { id: 'admin_pj', icon: 'fa-users-gear', text: 'Manajemen Akun PJ', roles: ['admin'] },
+                { id: 'laporan', icon: 'fa-file-export', text: 'Pusat Export Data', roles: ['admin', 'kepsek', 'pj'] },
+                { id: 'settings', icon: 'fa-sliders', text: 'Pengaturan Sistem', roles: ['admin'] }
             ];
             menu.forEach(m => {
                 if(m.roles.includes(currentUser.role)) {
-                    nav.innerHTML += `<button onclick="navigate('${m.id}')" id="nav-${m.id}" class="nav-v8 w-full text-left px-4 py-3 rounded-xl text-xs font-semibold flex items-center gap-3"><i class="fas ${m.icon} w-5 text-center text-base"></i> ${m.text}</button>`;
+                    nav.innerHTML += `<button onclick="navigate('${m.id}')" id="nav-${m.id}" class="nav-clay w-full text-left px-5 py-3.5 text-xs flex items-center gap-4"><i class="fas ${m.icon} w-5 text-center text-lg"></i> ${m.text}</button>`;
                 }
             });
         }
 
         function navigate(viewId) {
+            currentView = viewId; // Simpan state view saat ini
             document.querySelectorAll('#sidebar-nav button').forEach(b => b.classList.remove('active'));
             const btn = document.getElementById(`nav-${viewId}`);
             if(btn) btn.classList.add('active');
             const container = document.getElementById('main-content-area');
             const title = document.getElementById('page-title');
 
-            if(viewId === 'dashboard') { title.innerText = "Dashboard Utama"; renderDashboard(container); }
-            else if(viewId === 'instrumen') { title.innerText = "Instrumen Penilaian V8"; renderInstrumen(container); }
-            else if(viewId === 'admin_kriteria') { title.innerText = "Master Kriteria & Sub"; renderAdminKriteria(container); }
-            else if(viewId === 'admin_pj') { title.innerText = "Manajemen Akun PJ"; renderAdminPJ(container); }
-            else if(viewId === 'settings') { title.innerText = "Pengaturan Madrasah"; renderSettings(container); }
-            else if(viewId === 'laporan') { title.innerText = "Pusat Laporan & Export"; renderLaporan(container); }
+            if(viewId === 'dashboard') { title.innerText = "Grafik & Analisis"; renderDashboard(container); }
+            else if(viewId === 'instrumen') { title.innerText = "Kartu Instrumen Penilaian"; renderInstrumen(container); }
+            else if(viewId === 'admin_kriteria') { title.innerText = "Struktur Master Kriteria"; renderAdminKriteria(container); }
+            else if(viewId === 'admin_pj') { title.innerText = "Dataran Pengemudi PJ"; renderAdminPJ(container); }
+            else if(viewId === 'settings') { title.innerText = "Konfigurasi Madrasah"; renderSettings(container); }
+            else if(viewId === 'laporan') { title.innerText = "Pusat Dokumen & Laporan"; renderLaporan(container); }
         }
 
         function renderDashboard(container) {
@@ -431,31 +451,61 @@
             let maxSkor = total * 4; let pers = maxSkor === 0 ? 0 : (totalSkor / maxSkor) * 100;
 
             container.innerHTML = `
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-                    <div class="glass-v8-sub p-6"><p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Total Bukti</p><h3 class="text-3xl font-extrabold text-white">${total}</h3></div>
-                    <div class="glass-v8-sub p-6"><p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Bukti Diunggah</p><h3 class="text-3xl font-extrabold text-sky-400">${diisi}</h3></div>
-                    <div class="glass-v8-sub p-6"><p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Skor Total</p><h3 class="text-3xl font-extrabold text-amber-400">${totalSkor} / ${maxSkor}</h3></div>
-                    <div class="glass-v8-sub p-6"><p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Persentase</p><h3 class="text-3xl font-extrabold text-cyan-400">${pers.toFixed(1)}%</h3></div>
-                </div>`;
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                    <div class="clay-card clay-card-interactive p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[11px] font-extrabold uppercase tracking-wider">Total Bukti</p>
+                            <i class="fas fa-folder text-blue-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-4xl font-black text-slate-800">${total}</h3>
+                    </div>
+                    <div class="clay-card clay-card-interactive p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[11px] font-extrabold uppercase tracking-wider">Terunggah</p>
+                            <i class="fas fa-cloud-upload-alt text-emerald-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-4xl font-black text-emerald-600">${diisi}</h3>
+                    </div>
+                    <div class="clay-card clay-card-interactive p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[11px] font-extrabold uppercase tracking-wider">Skor Total</p>
+                            <i class="fas fa-star text-amber-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-4xl font-black text-amber-500">${totalSkor} <span class="text-lg text-slate-400">/ ${maxSkor}</span></h3>
+                    </div>
+                    <div class="clay-card clay-card-interactive p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[11px] font-extrabold uppercase tracking-wider">Pencapaian</p>
+                            <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-4xl font-black text-blue-600 mb-3">${pers.toFixed(1)}%</h3>
+                        <div class="clay-progress-bar"><div class="clay-progress-fill" style="width: ${pers}%"></div></div>
+                    </div>
+                </div>
+                <div class="clay-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">Selamat Datang di E-PKKM 3D UI</h3>
+                    <p class="text-sm text-slate-600 font-medium">Sistem Penilaian Kinerja Kepala Madrasah kini menggunakan antarmuka Modern Claymorphism yang responsif, lembut, dan interaktif. Silakan gunakan navigasi di sebelah kiri untuk mengelola data.</p>
+                </div>
+            `;
         }
 
         function renderInstrumen(container) {
-            let html = `<div class="space-y-6">`;
+            let html = `<div class="space-y-8">`;
             let comps = globalData.komponen;
             if(currentUser.role === 'pj') comps = comps.filter(k => k.id === currentUser.kriteria_id);
 
             comps.forEach(c => {
-                html += `<div class="glass-v8-sub p-6"><h3 class="font-bold text-lg text-sky-400 mb-4">${c.id}. ${c.nama}</h3>`;
+                html += `<div class="clay-card p-8"><h3 class="font-extrabold text-xl text-blue-600 mb-6 border-b-2 border-slate-200 pb-4">${c.id}. ${c.nama}</h3>`;
                 let subs = globalData.sub.filter(s => s.k_id === c.id);
                 subs.forEach(s => {
-                    html += `<div class="mb-4 pl-4 border-l-2 border-sky-500/40"><h4 class="font-semibold text-xs text-slate-300 mb-2 uppercase tracking-wider">${s.kode_sub} - ${s.nama}</h4>
-                    <table class="v8-table"><thead><tr><th>Keterangan Bukti Fisik</th><th class="w-40 text-center">Dokumen</th><th class="w-20 text-center">Skor</th><th class="w-28 text-center">Aksi</th></tr></thead><tbody>`;
+                    html += `<div class="mb-8 pl-4 border-l-4 border-blue-400/50"><h4 class="font-bold text-sm text-slate-700 mb-4 tracking-wide">${s.kode_sub} - ${s.nama}</h4>
+                    <table class="clay-table"><thead><tr><th class="text-left">Keterangan Bukti Fisik</th><th class="w-40 text-center">Dokumen</th><th class="w-20 text-center">Skor</th><th class="w-32 text-center">Aksi</th></tr></thead><tbody>`;
                     let inds = globalData.indikator.filter(i => i.sub_id === s.id);
                     inds.forEach(i => {
-                        let btnBukti = i.bukti_url ? `<a href="${i.bukti_url}" target="_blank" class="text-xs text-emerald-400 underline font-medium">Lihat Bukti</a>` : `<span class="text-xs text-slate-500 italic">Belum ada</span>`;
-                        let action = currentUser.role === 'pj' ? `<button onclick="modalUpload('${i.id}')" class="btn-v8-primary text-[10px] px-3 py-1"><i class="fas fa-upload"></i> Upload</button>` :
-                                     currentUser.role === 'kepsek' ? `<button onclick="modalNilai('${i.id}')" class="btn-v8-primary text-[10px] px-3 py-1 bg-gradient-to-tr from-emerald-600 to-teal-500"><i class="fas fa-star"></i> Nilai</button>` : `-`;
-                        html += `<tr class="v8-row"><td class="text-xs text-slate-200">${i.keterangan} ${i.catatan ? `<br><span class="text-[10px] text-amber-300">Catatan: ${i.catatan}</span>` : ''}</td><td class="text-center">${btnBukti}</td><td class="text-center font-bold text-sky-300 text-xs">${i.skor || '-'}</td><td class="text-center">${action}</td></tr>`;
+                        let btnBukti = i.bukti_url ? `<a href="${i.bukti_url}" target="_blank" class="text-xs text-blue-600 underline font-bold hover:text-blue-800"><i class="fas fa-external-link-alt mr-1"></i> Buka File</a>` : `<span class="text-xs text-slate-400 italic font-medium">Belum ada</span>`;
+                        let action = currentUser.role === 'pj' ? `<button onclick="modalUpload('${i.id}')" class="clay-btn clay-btn-primary text-[10px] px-4 py-2"><i class="fas fa-upload"></i> Upload</button>` :
+                                     currentUser.role === 'kepsek' ? `<button onclick="modalNilai('${i.id}')" class="clay-btn text-[10px] px-4 py-2 text-amber-600 hover:text-amber-700"><i class="fas fa-star mr-1"></i> Nilai</button>` : `-`;
+                        html += `<tr class="clay-row"><td class="text-sm font-medium text-slate-700">${i.keterangan} ${i.catatan ? `<br><div class="mt-2 p-2 rounded-lg bg-amber-100/50 text-[11px] text-amber-800 border border-amber-200"><i class="fas fa-comment-dots mr-1"></i> <b>Catatan Kepsek:</b> ${i.catatan}</div>` : ''}</td><td class="text-center">${btnBukti}</td><td class="text-center font-black text-blue-600 text-sm">${i.skor || '-'}</td><td class="text-center">${action}</td></tr>`;
                     });
                     html += `</tbody></table></div>`;
                 });
@@ -465,18 +515,18 @@
         }
 
         function renderAdminKriteria(container) {
-            let html = `<div class="mb-6 flex gap-3">
-                <button onclick="modalKriteria()" class="btn-v8-primary text-xs px-4 py-2"><i class="fas fa-plus"></i> Tambah Kriteria</button>
-                <button onclick="modalSubKriteria()" class="btn-v8-primary text-xs px-4 py-2"><i class="fas fa-plus"></i> Tambah Sub Kriteria</button>
-                <button onclick="modalIndikatorAdmin()" class="btn-v8-primary text-xs px-4 py-2 bg-gradient-to-tr from-amber-600 to-orange-500"><i class="fas fa-plus"></i> Tambah Bukti Fisik</button>
-            </div><div class="space-y-6">`;
+            let html = `<div class="mb-8 flex gap-4">
+                <button onclick="modalKriteria()" class="clay-btn clay-btn-primary text-xs px-5 py-3"><i class="fas fa-plus"></i> Kriteria Baru</button>
+                <button onclick="modalSubKriteria()" class="clay-btn clay-btn-primary text-xs px-5 py-3"><i class="fas fa-plus"></i> Sub Kriteria Baru</button>
+                <button onclick="modalIndikatorAdmin()" class="clay-btn text-xs px-5 py-3 text-blue-600"><i class="fas fa-plus"></i> Tambah Bukti Fisik</button>
+            </div><div class="space-y-8">`;
 
             globalData.komponen.forEach(k => {
-                html += `<div class="glass-v8-sub p-6"><h3 class="text-base font-bold text-sky-400 mb-3">${k.id}. ${k.nama}</h3>`;
+                html += `<div class="clay-card p-6"><h3 class="text-lg font-black text-blue-600 mb-4 border-b border-slate-200 pb-2">${k.id}. ${k.nama}</h3>`;
                 globalData.sub.filter(s => s.k_id === k.id).forEach(s => {
-                    html += `<div class="ml-4 mb-4 p-4 rounded-xl bg-white/[0.02] border border-white/5"><h4 class="font-semibold text-xs text-slate-200 mb-2">${s.kode_sub} - ${s.nama}</h4>`;
+                    html += `<div class="ml-4 mb-4 p-5 clay-inset"><h4 class="font-bold text-sm text-slate-800 mb-3">${s.kode_sub} - ${s.nama}</h4>`;
                     globalData.indikator.filter(i => i.sub_id === s.id).forEach(it => {
-                        html += `<div class="text-xs text-slate-300 ml-4 py-1 flex justify-between items-center border-b border-white/[0.03]"><span>- ${it.keterangan}</span><button onclick="deleteIndikator('${it.id}')" class="text-rose-400 hover:text-rose-300"><i class="fas fa-trash text-xs"></i></button></div>`;
+                        html += `<div class="text-xs font-medium text-slate-600 ml-4 py-2 flex justify-between items-center border-b border-slate-200/50"><span class="w-5/6">- ${it.keterangan}</span><button onclick="deleteIndikator('${it.id}')" class="clay-btn w-8 h-8 rounded-full text-rose-500 flex justify-center items-center"><i class="fas fa-trash text-[10px]"></i></button></div>`;
                     });
                     html += `</div>`;
                 });
@@ -488,26 +538,28 @@
         function renderAdminPJ(container) {
             let kOptions = globalData.komponen.map(k => `<option value="${k.id}">${k.id} - ${k.nama}</option>`).join('');
             container.innerHTML = `
-                <div class="glass-v8-sub p-6 mb-6">
-                    <h3 class="text-base font-bold text-sky-400 mb-4"><i class="fas fa-users-gear mr-2"></i> Tambah Akun Penanggung Jawab (PJ)</h3>
-                    <form onsubmit="handleCreatePJ(event)" class="space-y-4 max-w-xl">
+                <div class="clay-card p-8 mb-6 max-w-2xl">
+                    <h3 class="text-lg font-extrabold text-blue-600 mb-6 border-b border-slate-200 pb-3"><i class="fas fa-users-gear mr-2"></i> Tambah Akun Penanggung Jawab (PJ)</h3>
+                    <form onsubmit="handleCreatePJ(event)" class="space-y-5">
                         <div>
-                            <label class="text-xs text-slate-300 mb-1 block">Username PJ</label>
-                            <input type="text" id="pj-user" class="glass-input text-xs" placeholder="Contoh: pj_k1" required>
+                            <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Username PJ</label>
+                            <input type="text" id="pj-user" class="clay-inset text-sm" placeholder="Contoh: pj_k1" required>
                         </div>
                         <div>
-                            <label class="text-xs text-slate-300 mb-1 block">Password</label>
-                            <input type="password" id="pj-pass" class="glass-input text-xs" placeholder="Password" required>
+                            <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Password</label>
+                            <input type="password" id="pj-pass" class="clay-inset text-sm" placeholder="Masukkan password kuat" required>
                         </div>
                         <div>
-                            <label class="text-xs text-slate-300 mb-1 block">Nama Lengkap</label>
-                            <input type="text" id="pj-name" class="glass-input text-xs" placeholder="Nama PJ Kriteria" required>
+                            <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Nama Lengkap PJ</label>
+                            <input type="text" id="pj-name" class="clay-inset text-sm" placeholder="Nama Guru / Staf" required>
                         </div>
                         <div>
-                            <label class="text-xs text-slate-300 mb-1 block">Tanggung Jawab Kriteria</label>
-                            <select id="pj-kid" class="glass-input text-xs">${kOptions}</select>
+                            <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Tugas Kriteria</label>
+                            <select id="pj-kid" class="clay-inset text-sm font-semibold">${kOptions}</select>
                         </div>
-                        <button type="submit" class="btn-v8-primary text-xs px-5 py-2.5">Simpan Akun PJ</button>
+                        <div class="pt-4">
+                            <button type="submit" class="clay-btn clay-btn-primary text-sm px-8 py-3.5 w-full">Buat Akun PJ Sekarang</button>
+                        </div>
                     </form>
                 </div>
             `;
@@ -515,71 +567,143 @@
 
         function renderSettings(container) {
             container.innerHTML = `
-                <div class="glass-v8-sub p-6 max-w-xl">
-                    <h3 class="text-base font-bold text-sky-400 mb-4"><i class="fas fa-sliders mr-2"></i> Pengaturan Identitas Madrasah</h3>
-                    <form onsubmit="handleSaveSettings(event)" class="space-y-4">
+                <div class="clay-card p-8 max-w-2xl">
+                    <h3 class="text-lg font-extrabold text-blue-600 mb-6 border-b border-slate-200 pb-3"><i class="fas fa-sliders-h mr-2"></i> Konfigurasi Identitas Madrasah</h3>
+                    <form onsubmit="handleSaveSettings(event)" class="space-y-5">
                         <div>
-                            <label class="text-xs text-slate-300 mb-1 block">Nama Madrasah</label>
-                            <input type="text" id="set-nama" class="glass-input text-xs" value="${globalData.settings.nama_madrasah || ''}" required>
+                            <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Nama Lengkap Madrasah</label>
+                            <input type="text" id="set-nama" class="clay-inset text-sm" value="${globalData.settings.nama_madrasah || ''}" required>
                         </div>
                         <div>
-                            <label class="text-xs text-slate-300 mb-1 block">NPSN</label>
-                            <input type="text" id="set-npsn" class="glass-input text-xs" value="${globalData.settings.npsn || ''}" required>
+                            <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Nomor Pokok Sekolah Nasional (NPSN)</label>
+                            <input type="text" id="set-npsn" class="clay-inset text-sm" value="${globalData.settings.npsn || ''}" required>
                         </div>
-                        <button type="submit" class="btn-v8-primary text-xs px-5 py-2.5">Simpan Pengaturan</button>
+                        <div class="pt-4">
+                            <button type="submit" class="clay-btn clay-btn-primary text-sm px-8 py-3.5 w-full">Simpan Konfigurasi</button>
+                        </div>
                     </form>
                 </div>
             `;
         }
 
-        function renderLaporan(container) { container.innerHTML = `<div class="glass-v8-sub p-6 text-center"><button onclick="showToast('Fitur Export Siap','success')" class="btn-v8-primary text-xs px-6 py-3">Download PDF / Excel V8</button></div>`; }
+        function renderLaporan(container) { 
+            container.innerHTML = `
+                <div class="clay-card p-10 text-center max-w-xl mx-auto mt-10">
+                    <div class="w-24 h-24 mx-auto clay-inset flex items-center justify-center rounded-full mb-6 text-blue-500 text-4xl">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-3">Pusat Unduhan Laporan</h3>
+                    <p class="text-sm font-medium text-slate-500 mb-8">Export seluruh data penilaian kinerja beserta rekapitulasi nilai menjadi dokumen resmi siap cetak (PDF) atau spreadsheet (Excel).</p>
+                    <div class="flex justify-center gap-4">
+                        <button onclick="showToast('Fitur Export PDF segera hadir','info')" class="clay-btn clay-btn-primary text-sm px-6 py-3"><i class="fas fa-file-pdf mr-2"></i> Export PDF</button>
+                        <button onclick="showToast('Fitur Export Excel segera hadir','info')" class="clay-btn text-sm px-6 py-3 text-emerald-600"><i class="fas fa-file-excel mr-2"></i> Export Excel</button>
+                    </div>
+                </div>`; 
+        }
 
         function modalUpload(id) {
-            showModal("Upload Bukti", `<input type="text" id="up-url" class="glass-input text-xs" placeholder="URL Google Drive">`, async () => {
+            showModal("Upload Bukti Fisik", `
+                <div>
+                    <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Tautan Google Drive / Berkas</label>
+                    <input type="text" id="up-url" class="clay-inset text-sm" placeholder="https://drive.google.com/file/d/...">
+                    <p class="text-[10px] text-slate-400 mt-2 font-medium"><i class="fas fa-info-circle"></i> Pastikan link Drive sudah di-set ke "Anyone with the link can view".</p>
+                </div>`, async () => {
                 let url = document.getElementById('up-url').value;
                 let res = await callApi('upload_bukti', { id, url });
-                if(res.success) { closeModal(); await loadAllData(); showToast("Berhasil disimpan", "success"); }
+                if(res.success) { closeModal(); await loadAllData(); showToast("Bukti berhasil disimpan", "success"); }
             });
         }
 
         function modalNilai(id) {
-            showModal("Berikan Nilai", `<div class="space-y-4"><select id="n-skor" class="glass-input text-xs"><option value="4">4 - Amat Baik</option><option value="3">3 - Baik</option><option value="2">2 - Cukup</option><option value="1">1 - Kurang</option></select><textarea id="n-catatan" class="glass-input text-xs" placeholder="Catatan..."></textarea></div>`, async () => {
+            showModal("Evaluasi & Beri Nilai", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Skor Penilaian</label>
+                        <select id="n-skor" class="clay-inset text-sm font-bold text-blue-600">
+                            <option value="4">⭐ 4 - Amat Baik</option>
+                            <option value="3">⭐ 3 - Baik</option>
+                            <option value="2">⭐ 2 - Cukup</option>
+                            <option value="1">⭐ 1 - Kurang</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Catatan Evaluasi (Opsional)</label>
+                        <textarea id="n-catatan" class="clay-inset text-sm h-24" placeholder="Ketik catatan rekomendasi atau temuan di sini..."></textarea>
+                    </div>
+                </div>`, async () => {
                 let skor = document.getElementById('n-skor').value;
                 let catatan = document.getElementById('n-catatan').value;
                 let res = await callApi('beri_nilai', { id, skor, catatan });
-                if(res.success) { closeModal(); await loadAllData(); showToast("Nilai disimpan", "success"); }
+                if(res.success) { closeModal(); await loadAllData(); showToast("Penilaian berhasil disimpan", "success"); }
             });
         }
 
         function modalKriteria() {
-            showModal("Tambah Kriteria", `<div class="space-y-4"><input type="text" id="k-id" class="glass-input text-xs" placeholder="Kode (Misal: F)"><input type="text" id="k-nama" class="glass-input text-xs" placeholder="Nama Kriteria"></div>`, async () => {
+            showModal("Master: Tambah Kriteria Utama", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Kode Kriteria</label>
+                        <input type="text" id="k-id" class="clay-inset text-sm" placeholder="Misal: F">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Nama Kriteria</label>
+                        <input type="text" id="k-nama" class="clay-inset text-sm" placeholder="Misal: Kegiatan Inovasi">
+                    </div>
+                </div>`, async () => {
                 let id = document.getElementById('k-id').value; let nama = document.getElementById('k-nama').value;
                 let res = await callApi('save_kriteria', { id, nama });
-                if(res.success) { closeModal(); await loadAllData(); showToast("Ditambahkan", "success"); }
+                if(res.success) { closeModal(); await loadAllData(); showToast("Kriteria ditambahkan", "success"); }
             });
         }
 
         function modalSubKriteria() {
             let opts = globalData.komponen.map(k => `<option value="${k.id}">${k.id} - ${k.nama}</option>`).join('');
-            showModal("Tambah Sub Kriteria", `<div class="space-y-4"><select id="sub-kid" class="glass-input text-xs">${opts}</select><input type="text" id="sub-kode" class="glass-input text-xs" placeholder="Kode Sub (A.1)"><input type="text" id="sub-nama" class="glass-input text-xs" placeholder="Nama Sub"></div>`, async () => {
+            showModal("Master: Tambah Sub Kriteria", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Induk Kriteria</label>
+                        <select id="sub-kid" class="clay-inset text-sm font-semibold">${opts}</select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Kode Sub</label>
+                        <input type="text" id="sub-kode" class="clay-inset text-sm" placeholder="Misal: A.1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Nama Sub Kriteria</label>
+                        <input type="text" id="sub-nama" class="clay-inset text-sm" placeholder="Nama sub kriteria...">
+                    </div>
+                </div>`, async () => {
                 let k_id = document.getElementById('sub-kid').value; let kode_sub = document.getElementById('sub-kode').value; let nama = document.getElementById('sub-nama').value;
                 let res = await callApi('save_sub', { k_id, kode_sub, nama });
-                if(res.success) { closeModal(); await loadAllData(); showToast("Ditambahkan", "success"); }
+                if(res.success) { closeModal(); await loadAllData(); showToast("Sub Kriteria ditambahkan", "success"); }
             });
         }
 
         function modalIndikatorAdmin() {
             let opts = globalData.sub.map(s => `<option value="${s.id}">${s.kode_sub} - ${s.nama}</option>`).join('');
-            showModal("Tambah Bukti Fisik", `<div class="space-y-4"><select id="ind-subid" class="glass-input text-xs">${opts}</select><textarea id="ind-ket" class="glass-input text-xs" placeholder="Keterangan bukti..."></textarea></div>`, async () => {
+            showModal("Master: Tambah Indikator & Bukti", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Pilih Sub Kriteria Induk</label>
+                        <select id="ind-subid" class="clay-inset text-sm font-semibold">${opts}</select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Keterangan Dokumen Bukti Fisik</label>
+                        <textarea id="ind-ket" class="clay-inset text-sm h-24" placeholder="Misal: Dokumen kurikulum madrasah yang telah disahkan..."></textarea>
+                    </div>
+                </div>`, async () => {
                 let sub_id = document.getElementById('ind-subid').value; let keterangan = document.getElementById('ind-ket').value;
                 let res = await callApi('save_indikator', { sub_id, keterangan });
-                if(res.success) { closeModal(); await loadAllData(); showToast("Ditambahkan", "success"); }
+                if(res.success) { closeModal(); await loadAllData(); showToast("Indikator ditambahkan", "success"); }
             });
         }
 
         async function deleteIndikator(id) {
-            let res = await callApi('delete_indikator', { id });
-            if(res.success) { await loadAllData(); showToast("Dihapus", "success"); }
+            showModal("Konfirmasi Hapus", "<p class='text-sm text-slate-600 font-medium'>Yakin ingin menghapus indikator dan bukti fisik ini secara permanen?</p>", async () => {
+                closeModal();
+                let res = await callApi('delete_indikator', { id });
+                if(res.success) { await loadAllData(); showToast("Indikator berhasil dihapus", "success"); }
+            }, "Ya, Hapus!", true);
         }
 
         async function handleCreatePJ(e) {

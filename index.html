@@ -485,8 +485,53 @@
             container.innerHTML = html + `</div>`;
         }
 
-        function renderAdminPJ(container) { container.innerHTML = `<div class="glass-v8-sub p-6"><p class="text-xs text-slate-300">Modul akun PJ terhubung otomatis.</p></div>`; }
-        function renderSettings(container) { container.innerHTML = `<div class="glass-v8-sub p-6"><p class="text-xs text-slate-300">Pengaturan terhubung otomatis.</p></div>`; }
+        function renderAdminPJ(container) {
+            let kOptions = globalData.komponen.map(k => `<option value="${k.id}">${k.id} - ${k.nama}</option>`).join('');
+            container.innerHTML = `
+                <div class="glass-v8-sub p-6 mb-6">
+                    <h3 class="text-base font-bold text-sky-400 mb-4"><i class="fas fa-users-gear mr-2"></i> Tambah Akun Penanggung Jawab (PJ)</h3>
+                    <form onsubmit="handleCreatePJ(event)" class="space-y-4 max-w-xl">
+                        <div>
+                            <label class="text-xs text-slate-300 mb-1 block">Username PJ</label>
+                            <input type="text" id="pj-user" class="glass-input text-xs" placeholder="Contoh: pj_k1" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-300 mb-1 block">Password</label>
+                            <input type="password" id="pj-pass" class="glass-input text-xs" placeholder="Password" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-300 mb-1 block">Nama Lengkap</label>
+                            <input type="text" id="pj-name" class="glass-input text-xs" placeholder="Nama PJ Kriteria" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-300 mb-1 block">Tanggung Jawab Kriteria</label>
+                            <select id="pj-kid" class="glass-input text-xs">${kOptions}</select>
+                        </div>
+                        <button type="submit" class="btn-v8-primary text-xs px-5 py-2.5">Simpan Akun PJ</button>
+                    </form>
+                </div>
+            `;
+        }
+
+        function renderSettings(container) {
+            container.innerHTML = `
+                <div class="glass-v8-sub p-6 max-w-xl">
+                    <h3 class="text-base font-bold text-sky-400 mb-4"><i class="fas fa-sliders mr-2"></i> Pengaturan Identitas Madrasah</h3>
+                    <form onsubmit="handleSaveSettings(event)" class="space-y-4">
+                        <div>
+                            <label class="text-xs text-slate-300 mb-1 block">Nama Madrasah</label>
+                            <input type="text" id="set-nama" class="glass-input text-xs" value="${globalData.settings.nama_madrasah || ''}" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-300 mb-1 block">NPSN</label>
+                            <input type="text" id="set-npsn" class="glass-input text-xs" value="${globalData.settings.npsn || ''}" required>
+                        </div>
+                        <button type="submit" class="btn-v8-primary text-xs px-5 py-2.5">Simpan Pengaturan</button>
+                    </form>
+                </div>
+            `;
+        }
+
         function renderLaporan(container) { container.innerHTML = `<div class="glass-v8-sub p-6 text-center"><button onclick="showToast('Fitur Export Siap','success')" class="btn-v8-primary text-xs px-6 py-3">Download PDF / Excel V8</button></div>`; }
 
         function modalUpload(id) {
@@ -535,6 +580,34 @@
         async function deleteIndikator(id) {
             let res = await callApi('delete_indikator', { id });
             if(res.success) { await loadAllData(); showToast("Dihapus", "success"); }
+        }
+
+        async function handleCreatePJ(e) {
+            e.preventDefault();
+            let username = document.getElementById('pj-user').value;
+            let password = document.getElementById('pj-pass').value;
+            let name = document.getElementById('pj-name').value;
+            let kriteria_id = document.getElementById('pj-kid').value;
+            let res = await callApi('save_pj', { username, password, name, kriteria_id });
+            if(res.success) {
+                showToast("Akun PJ berhasil dibuat", "success");
+                await loadAllData();
+            } else {
+                showToast(res.message || "Gagal membuat akun PJ", "error");
+            }
+        }
+
+        async function handleSaveSettings(e) {
+            e.preventDefault();
+            let nama_madrasah = document.getElementById('set-nama').value;
+            let npsn = document.getElementById('set-npsn').value;
+            let res = await callApi('save_settings', { nama_madrasah, npsn });
+            if(res.success) {
+                showToast("Pengaturan disimpan", "success");
+                await loadAllData();
+            } else {
+                showToast("Gagal menyimpan pengaturan", "error");
+            }
         }
     </script>
 </body>

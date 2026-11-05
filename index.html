@@ -666,6 +666,85 @@
             `;
         }
 
+        // FUNGSI RENDER TAB LAPORAN & EXPORT
+        function renderLaporan(container) {
+            container.innerHTML = `
+                <div class="clay-card p-8 max-w-3xl">
+                    <h3 class="text-lg font-extrabold text-blue-600 mb-6 border-b border-slate-200 pb-3"><i class="fas fa-file-export mr-2"></i> Pusat Export Laporan PKKM</h3>
+                    <p class="text-sm text-slate-600 font-medium mb-8">Unduh rekapitulasi penilaian kinerja Kepala Madrasah dalam format PDF untuk dokumen fisik resmi, atau Excel untuk olah data lebih lanjut di komputer.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <button onclick="exportPDF()" class="clay-card clay-card-interactive p-6 flex flex-col items-center justify-center gap-4 text-rose-600 hover:text-rose-700 transition-colors">
+                            <i class="fas fa-file-pdf text-4xl"></i>
+                            <span class="font-bold tracking-wide">Export Laporan PDF</span>
+                        </button>
+                        <button onclick="exportExcel()" class="clay-card clay-card-interactive p-6 flex flex-col items-center justify-center gap-4 text-emerald-600 hover:text-emerald-700 transition-colors">
+                            <i class="fas fa-file-excel text-4xl"></i>
+                            <span class="font-bold tracking-wide">Export Data Excel</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.text("LAPORAN HASIL PENILAIAN KINERJA KEPALA MADRASAH", 105, 20, { align: "center" });
+            
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            doc.text("Madrasah : " + (globalData.settings.nama_madrasah || "-"), 14, 35);
+            doc.text("NPSN : " + (globalData.settings.npsn || "-"), 14, 42);
+            doc.text("Tahun Ajaran : " + (globalData.settings.tahun_ajaran || "-"), 14, 49);
+            
+            let tableData = [];
+            globalData.indikator.forEach(ind => {
+                let sub = globalData.sub.find(s => s.id === ind.sub_id);
+                let komp = sub ? globalData.komponen.find(k => k.id === sub.k_id) : null;
+                let kompName = komp ? komp.nama : "-";
+                let subName = sub ? sub.nama : "-";
+                tableData.push([kompName, subName, ind.keterangan, ind.skor || 0, ind.catatan || "-"]);
+            });
+
+            doc.autoTable({
+                startY: 60,
+                head: [['Komponen', 'Sub Kriteria', 'Indikator / Bukti', 'Skor', 'Catatan']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [74, 144, 226] },
+                styles: { fontSize: 9 }
+            });
+
+            doc.save("Laporan_PKKM_" + (globalData.settings.tahun_pkkm || "2026") + ".pdf");
+            showToast("Laporan PDF berhasil diunduh", "success");
+        }
+
+        function exportExcel() {
+            let ws_data = [["Komponen", "Kode Sub", "Sub Kriteria", "Indikator / Bukti Fisik", "Tautan Bukti", "Skor", "Catatan"]];
+            globalData.indikator.forEach(ind => {
+                let sub = globalData.sub.find(s => s.id === ind.sub_id) || {};
+                let komp = globalData.komponen.find(k => k.id === sub.k_id) || {};
+                ws_data.push([
+                    komp.nama || "-", 
+                    sub.kode_sub || "-", 
+                    sub.nama || "-", 
+                    ind.keterangan, 
+                    ind.bukti_url || "Belum ada", 
+                    ind.skor || 0, 
+                    ind.catatan || "-"
+                ]);
+            });
+            let ws = XLSX.utils.aoa_to_sheet(ws_data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Rekap PKKM");
+            XLSX.writeFile(wb, "Rekap_PKKM_" + (globalData.settings.tahun_pkkm || "2026") + ".xlsx");
+            showToast("Data Excel berhasil diunduh", "success");
+        }
+
         function previewLogo(event) {
             const preview = document.getElementById('logo-preview');
             const file = event.target.files[0];
@@ -708,6 +787,23 @@
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            });
+        }
+
+        // FUNGSI UPLOAD URL DRIVE OLEH PJ
+        function modalUpload(id) {
+            showModal("Upload Bukti Fisik", `
+                <div class="space-y-5">
+                    <div>
+                        <label class="text-xs font-bold text-slate-600 mb-2 block uppercase tracking-wider">Tautan Google Drive (URL)</label>
+                        <input type="url" id="u-url" class="clay-inset text-sm" placeholder="Paste link Google Drive di sini..." required>
+                        <p class="text-[10px] text-slate-400 mt-2 font-medium"><i class="fas fa-info-circle"></i> Pastikan akses link di-set ke "Siapa saja yang memiliki link (Viewer)".</p>
+                    </div>
+                </div>`, async () => {
+                let url = document.getElementById('u-url').value;
+                if(!url) { showToast("URL tidak boleh kosong!", "error"); return; }
+                let res = await callApi('upload_bukti', { id, url });
+                if(res.success) { closeModal(); await loadAllData(); showToast("Tautan bukti berhasil disimpan", "success"); }
             });
         }
 
